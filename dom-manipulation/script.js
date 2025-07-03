@@ -10,6 +10,7 @@ const defaultQuotes = [
     { text: "The only impossible journey is the one you never begin.", category: "Adventure", author: "Tony Robbins" },
     { text: "Success is not final, failure is not fatal: It is the courage to continue that counts.", category: "Perseverance", author: "Winston Churchill" }
 ];
+
 let quotes = [];
 
 const quoteDisplay = document.getElementById('quoteDisplay');
@@ -28,11 +29,11 @@ const exportQuotesBtn = document.getElementById('exportQuotesBtn');
 const importFileInput = document.getElementById('importFile');
 const lastViewedQuoteElement = document.getElementById('lastViewedQuote');
 
-
 function showMessage(message, type = 'info') {
     messageBox.textContent = message;
     messageBox.className = 'mt-6 p-4 rounded-lg border';
     messageBox.style.display = 'block'; 
+
     switch (type) {
         case 'success':
             messageBox.classList.add('bg-green-100', 'text-green-800', 'border-green-300');
@@ -46,7 +47,6 @@ function showMessage(message, type = 'info') {
             break;
     }
 
-    // Hide the message box after 3 seconds
     setTimeout(() => {
         messageBox.style.display = 'none';
     }, 3000);
@@ -73,8 +73,7 @@ function loadQuotes() {
         console.error("Error loading from local storage: ", e);
         showMessage("Failed to load quotes from local storage. Data might be corrupted.", "error");
         quotes = [...defaultQuotes]; 
-}
-
+    }}
 function saveLastViewedQuote(quoteTextValue) {
     try {
         sessionStorage.setItem('lastViewedQuote', quoteTextValue);
@@ -92,9 +91,7 @@ function loadLastViewedQuote() {
         }
     } catch (e) {
         console.error("Error loading last viewed quote from session storage: ", e);
-    }
-}
-
+    }}
 function populateCategories() {
     const categories = ['all', ...new Set(quotes.map(quote => quote.category.toLowerCase()))];
 
@@ -106,12 +103,9 @@ function populateCategories() {
             option.value = category;
             option.textContent = category.charAt(0).toUpperCase() + category.slice(1);
             categorySelect.appendChild(option);
-        }
-    });
-}
-
+        } });}
 function showRandomQuote() {
-    const selectedCategory = categorySelect.value;
+    const selectedCategory = categorySelect.value; 
     let filteredQuotes = quotes;
     if (selectedCategory !== 'all') {
         filteredQuotes = quotes.filter(quote => quote.category.toLowerCase() === selectedCategory);
@@ -132,10 +126,13 @@ function showRandomQuote() {
 
     saveLastViewedQuote(randomQuote.text);
 }
+
 function addQuote() {
+
     const text = newQuoteTextInput.value.trim();
     const author = newQuoteAuthorInput.value.trim();
     const category = newQuoteCategoryInput.value.trim();
+
     if (!text || !category) {
         showMessage("Please enter both quote text and category.", "error");
         return;
@@ -150,26 +147,27 @@ function addQuote() {
     quotes.push(newQuote);
     saveQuotes(); 
     showMessage("Quote added successfully!", "success");
+
     newQuoteTextInput.value = '';
     newQuoteAuthorInput.value = '';
     newQuoteCategoryInput.value = '';
-
     populateCategories();
-     showRandomQuote();
+    showRandomQuote();
 }
+
 function exportQuotes() {
     try {
-        const dataStr = JSON.stringify(quotes, null, 2); 
+        const dataStr = JSON.stringify(quotes, null, 2);
         const blob = new Blob([dataStr], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
 
         const a = document.createElement('a');
         a.href = url;
         a.download = 'quotes.json'; 
-        document.body.appendChild(a);
+        document.body.appendChild(a); 
         a.click(); 
-        document.body.removeChild(a); 
-        URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url); 
         showMessage("Quotes exported successfully!", "success");
     } catch (e) {
         console.error("Error exporting quotes: ", e);
@@ -209,10 +207,13 @@ function importFromJsonFile(event) {
     };
     fileReader.readAsText(file); 
 }
+
 newQuoteBtn.addEventListener('click', showRandomQuote);
+
 submitNewQuoteBtn.addEventListener('click', addQuote);
+
 addQuoteFormToggleBtn.addEventListener('click', () => {
-    addQuoteSection.classList.toggle('hidden');
+    addQuoteSection.classList.toggle('hidden'); 
     if (!addQuoteSection.classList.contains('hidden')) {
         addQuoteFormToggleBtn.textContent = "Hide Add Quote Form";
     } else {
@@ -221,11 +222,14 @@ addQuoteFormToggleBtn.addEventListener('click', () => {
 });
 
 categorySelect.addEventListener('change', showRandomQuote);
+
 exportQuotesBtn.addEventListener('click', exportQuotes);
-importFileInput.addEventListener('change', importFrom
+
+importFileInput.addEventListener('change', importFromJsonFile);
+
 document.addEventListener('DOMContentLoaded', () => {
-    loadQuotes();         
+    loadQuotes();        
     populateCategories(); 
-    showRandomQuote();   
-    loadLastViewedQuote();
+    showRandomQuote();    
+    loadLastViewedQuote(); 
 });
